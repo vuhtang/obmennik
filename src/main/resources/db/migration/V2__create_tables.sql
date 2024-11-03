@@ -1,0 +1,1 @@
+alter table coin_to_wallet add amount bigint not null default 0;

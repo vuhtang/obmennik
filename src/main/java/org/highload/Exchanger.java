@@ -1,11 +1,11 @@
-package org.example;
+package org.highload;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Main {
+public class Exchanger {
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(Exchanger.class, args);
     }
 }
