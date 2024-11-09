@@ -8,7 +8,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "control_access")
-public class ControllAccess {
+public class ControlAccess {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

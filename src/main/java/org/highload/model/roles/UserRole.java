@@ -24,7 +24,7 @@ public class UserRole {
             joinColumns = { @JoinColumn(name = "role_id") },
             inverseJoinColumns = { @JoinColumn(name = "access_id") }
     )
-    private Set<ControllAccess> accesses;
+    private Set<ControlAccess> accesses;
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
