@@ -3,8 +3,6 @@ package org.highload.model.stock;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigInteger;
-
 @Data
 @Entity
 @Table(name = "bank_account")

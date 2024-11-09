@@ -3,7 +3,6 @@ package org.highload.model.stock;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.highload.model.User;
-import org.highload.model.roles.UserRole;
 
 import java.util.Set;
 
