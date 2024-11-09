@@ -8,26 +8,16 @@ import java.sql.Date;
 
 @Data
 @Entity
-@Table(name = "coin_exchange_history")
-public class CoinExchangeHistory {
+@Table(name = "coin_buy_history")
+public class CoinBuyHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "coin_sell_id")
-    private Coin coinSell;
-
-    @ManyToOne
     @JoinColumn(name = "coin_buy_id")
     private Coin coinBuy;
-
-    @Column(name = "coin_sell_amount")
-    private Long coinSellAmount;
-
-    @Column(name = "coin_sell_price")
-    private Long coinSellPrice;
 
     @Column(name = "coin_buy_amount")
     private Long coinBuyAmount;

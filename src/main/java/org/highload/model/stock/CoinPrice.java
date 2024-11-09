@@ -17,5 +17,5 @@ public class CoinPrice {
     private Coin coin;
 
     @Column(name = "price_dollars")
-    private Integer priceInDollars;
+    private Long priceInDollars;
 }

@@ -15,4 +15,7 @@ public class FiatWallet {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @Column(name = "balance")
+    private Long balance;
 }

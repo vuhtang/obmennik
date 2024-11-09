@@ -61,28 +61,29 @@ create table if not exists ticket_chat_message (
 
 -- BANK
 
-create table if not exists bank_account (
-    id          serial primary key,
-    name        varchar(100) not null,
-    balance     bigint not null
-);
+-- create table if not exists bank_account (
+--     id          serial primary key,
+--     name        varchar(100) not null,
+--     balance     bigint not null
+-- );
 
-create table if not exists bank (
-    id          serial primary key,
-    name        varchar(50) not null,
-    bank_account_id     serial references bank_account (id) on delete set null
-);
+-- create table if not exists bank (
+--     id          serial primary key,
+--     name        varchar(50) not null,
+--     bank_account_id     serial references bank_account (id) on delete set null
+-- );
 
 create table if not exists fiat_wallet (
     id          serial primary key,
-    account_id  serial references account (id) on delete cascade
+    account_id  serial references account (id) on delete cascade,
+    balance     bigint not null
 );
 
-create table if not exists dollar_exchange_history (
-    id          serial primary key,
-    wallet_id   serial references fiat_wallet (id) on delete cascade,
-    bank_account_id   serial references bank_account (id) on delete cascade
-);
+-- create table if not exists dollar_exchange_history (
+--     id          serial primary key,
+--     wallet_id   serial references fiat_wallet (id) on delete cascade,
+--     bank_account_id   serial references bank_account (id) on delete cascade
+-- );
 
 -- STOCK
 
@@ -99,7 +100,8 @@ create table if not exists coin (
 create table if not exists coin_to_wallet (
     id          serial primary key,
     coin_id     serial references coin (id) on delete cascade,
-    wallet_id   serial references wallet (id) on delete cascade
+    wallet_id   serial references wallet (id) on delete cascade,
+    amount      bigint not null
 );
 
 create table if not exists stock_account (
@@ -111,15 +113,21 @@ create table if not exists stock_account (
 create table if not exists coin_price (
     id              serial primary key,
     coin_id         serial references coin (id) on delete cascade,
-    price_dollars   int not null
+    price_dollars   bigint not null
 );
 
 create table if not exists coin_exchange_history (
-    id              serial primary key,
-    coin_id_sell    serial references coin (id) on delete cascade,
-    coin_id_buy    serial references coin (id) on delete cascade,
-    amount          int not null,
-    tax             int not null,
-    customer_id     serial references customer (id) on delete cascade
+    id                  serial primary key,
+    coin_sell_id        serial references coin (id) on delete cascade,
+    coin_sell_amount    bigint not null,
+    coin_sell_price     bigint not null,
+
+    coin_buy_id         serial references coin (id) on delete cascade,
+    coin_buy_amount     bigint not null,
+    coin_buy_price      bigint not null,
+
+    tax                 int not null,
+    date                date not null,
+    customer_id         serial references customer (id) on delete cascade
 );
 
