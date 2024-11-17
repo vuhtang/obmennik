@@ -42,6 +42,6 @@ public class CoinExchangeHistory {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private User user;
+    @JoinColumn(name = "wallet_id")
+    private Wallet user;
 }

@@ -5,5 +5,5 @@ create table if not exists coin_buy_history (
     coin_buy_price      bigint not null,
     tax         bigint not null,
     date date not null,
-    customer_id     serial references customer (id) on delete cascade
+    wallet_id     serial references wallet (id) on delete cascade
 );

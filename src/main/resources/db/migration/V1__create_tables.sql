@@ -113,7 +113,8 @@ create table if not exists stock_account (
 create table if not exists coin_price (
     id              serial primary key,
     coin_id         serial references coin (id) on delete cascade,
-    price_dollars   bigint not null
+    price_dollars   bigint not null,
+    dttm            date not null
 );
 
 create table if not exists coin_exchange_history (
@@ -128,6 +129,6 @@ create table if not exists coin_exchange_history (
 
     tax                 int not null,
     date                date not null,
-    customer_id         serial references customer (id) on delete cascade
+    wallet_id         serial references wallet (id) on delete cascade
 );
 
