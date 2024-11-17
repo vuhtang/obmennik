@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.highload.exceptions.WeHaveNoManyyyException;
 import org.highload.model.stock.CoinToWallet;
 import org.highload.model.stock.StockAccountBalance;
-import org.highload.model.stock.Wallet;
 import org.highload.repository.CoinToWalletRepository;
 import org.highload.repository.StockRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

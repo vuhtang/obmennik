@@ -2,7 +2,6 @@ package org.highload.model.stock;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.highload.model.User;
 
 import java.sql.Date;
 
