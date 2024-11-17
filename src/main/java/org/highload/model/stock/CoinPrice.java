@@ -3,6 +3,8 @@ package org.highload.model.stock;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.sql.Date;
+
 @Data
 @Entity
 @Table(name = "coin_price")
@@ -17,5 +19,8 @@ public class CoinPrice {
     private Coin coin;
 
     @Column(name = "price_dollars")
-    private Integer priceInDollars;
+    private Long priceInDollars;
+
+    @Column(name = "dttm")
+    private Date dttm;
 }

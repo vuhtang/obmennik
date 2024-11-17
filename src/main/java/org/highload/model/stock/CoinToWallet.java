@@ -21,5 +21,5 @@ public class CoinToWallet {
     private Wallet wallet;
 
     @Column(name = "amount")
-    private Integer amount;
+    private Long amount;
 }
