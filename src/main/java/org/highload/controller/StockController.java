@@ -1,6 +1,9 @@
 package org.highload.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.highload.dto.BuyCoinTransactionRequestBodyDTO;
+import org.highload.service.StockService;
+import org.springframework.web.bind.annotation.*;
 
 
 // ПРоверка ЭКСШЕПШЕН КАСТОМНЫЙ У НАС НЕТ ДЕНЕГ ЕСЛИ МОНЕТ НА АККАУНТЕ НАШЕМ НЕТ
@@ -14,5 +17,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 // БАНК УДАЛЯЕМ.
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/stock")
 public class StockController {
+
+    private final StockService stockService;
+//    TODO name of method
+    @PostMapping("/{id}/buyCoinByFiat")
+    public void buyCoinByFiat(@PathVariable("id") Long id, @RequestBody BuyCoinTransactionRequestBodyDTO buyCoinTransactionRequestBodyDTO){
+        stockService.buyCoinByFiat(
+                id,
+                buyCoinTransactionRequestBodyDTO.getCoinIdToBuy(),
+                buyCoinTransactionRequestBodyDTO.getAmount(),
+                buyCoinTransactionRequestBodyDTO.getUserFiatId()
+        );
+    }
+
+    @PostMapping("/{id}/sellCoinByFiat")
+    public void sellCoinByFiat(@PathVariable("id") Long id, @RequestBody BuyCoinTransactionRequestBodyDTO buyCoinTransactionRequestBodyDTO){
+        stockService.sellCoinByFiat(
+                id,
+                buyCoinTransactionRequestBodyDTO.getCoinIdToBuy(),
+                buyCoinTransactionRequestBodyDTO.getAmount()
+        );
+    }
 }

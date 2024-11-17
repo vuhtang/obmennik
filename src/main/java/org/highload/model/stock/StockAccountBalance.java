@@ -18,5 +18,5 @@ public class StockAccountBalance {
     private Coin coin;
 
     @Column(name = "amount")
-    private Integer amount;
+    private Long amount;
 }

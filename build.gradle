@@ -21,8 +21,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
     implementation 'org.flywaydb:flyway-core:9.22.3'
-    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
+//    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
     implementation group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.0.Final'
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
 }
 
