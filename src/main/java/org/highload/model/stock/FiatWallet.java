@@ -12,6 +12,8 @@ public class FiatWallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Float balance;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

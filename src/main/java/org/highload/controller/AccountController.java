@@ -9,15 +9,19 @@ import org.highload.mappers.AccountWalletsMapper;
 import org.highload.model.stock.Account;
 import org.highload.model.stock.Wallet;
 import org.highload.service.AccountService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
 import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/accounts")
+@Validated
 public class AccountController {
 
     private AccountService accountService;
@@ -25,10 +29,15 @@ public class AccountController {
     private AccountWalletsMapper accountWalletsMapper;
 
     @GetMapping("/")
-    public ResponseEntity<List<AccountShortInfoDTO>> getAllAccounts() {
+    public ResponseEntity<List<AccountShortInfoDTO>> getAllAccounts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") @Max(50) int size
+    ) {
 
-        List<Account> accounts = accountService.getAllAccounts();
-        return ResponseEntity.ok(accountMapper.mapListToShortDTO(accounts));
+        Page<Account> accounts = accountService.getAllAccounts(page, size);
+        ResponseEntity<List<AccountShortInfoDTO>> responseEntity = ResponseEntity.ok(accountMapper.mapListToShortDTO(accounts.toList()));
+        responseEntity.getHeaders().add("X-Total-Count", String.valueOf(accounts.getTotalElements()));
+        return responseEntity;
     }
 
     @GetMapping("/{id}")

@@ -5,9 +5,11 @@ import org.highload.model.stock.Account;
 import org.highload.model.stock.Wallet;
 import org.highload.repository.AccountRepository;
 import org.highload.repository.WalletRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,8 +19,9 @@ public class AccountService {
     private AccountRepository accountRepository;
     private WalletRepository walletRepository;
 
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
+    public Page<Account> getAllAccounts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return accountRepository.findAll(pageable);
     }
 
     public Account getAccountById(Long id) {
