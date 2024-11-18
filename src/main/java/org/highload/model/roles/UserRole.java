@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.highload.model.User;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,5 +28,5 @@ public class UserRole {
     private Set<ControlAccess> accesses;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 }

@@ -15,9 +15,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring",injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AccountMapper {
 
-    static AccountInfoDTO mapToDTO(Account account) {
-        Set<UserRole> set = account.getUser().getRoles();
-        User user = account.getUser();
+    static AccountInfoDTO mapToDTO(Account account, List<UserRole> roles) {
         return AccountInfoDTO.builder()
                 .id(account.getId())
                 .name(account.getUser().getName())
@@ -25,7 +23,7 @@ public interface AccountMapper {
                 .email(account.getUser().getEmail())
                 .dob(account.getUser().getDateOfBirth().toString())
                 .roles(
-                        account.getUser().getRoles().stream().map(UserRole::getName).toList()
+                        roles.stream().map(UserRole::getName).toList()
                 )
                 .build();
     }

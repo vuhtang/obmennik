@@ -6,6 +6,7 @@ import org.highload.model.roles.UserRole;
 import org.highload.model.stock.Account;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -29,13 +30,13 @@ public class User {
     @Column(name = "dob")
     private Date dateOfBirth;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "customer_to_role",
             joinColumns = { @JoinColumn(name = "customer_id") },
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
-    private Set<UserRole> roles;
+    private Set<UserRole> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Account> accounts;

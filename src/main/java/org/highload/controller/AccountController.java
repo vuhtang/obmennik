@@ -8,9 +8,12 @@ import org.highload.dto.AccountShortInfoDTO;
 import org.highload.dto.WalletDTO;
 import org.highload.mappers.AccountMapper;
 import org.highload.mappers.AccountWalletsMapper;
+import org.highload.model.User;
+import org.highload.model.roles.UserRole;
 import org.highload.model.stock.Account;
 import org.highload.model.stock.Wallet;
 import org.highload.service.AccountService;
+import org.highload.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,7 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountMapper accountMapper;
     private final AccountWalletsMapper accountWalletsMapper;
+    private final UserService userService;
 
     @GetMapping("/")
     public ResponseEntity<List<AccountShortInfoDTO>> getAllAccounts(
@@ -42,11 +46,8 @@ public class AccountController {
         List<AccountShortInfoDTO> dto = accountMapper.mapListToShortDTO(accounts.toList());
         if (dto.isEmpty())
             return ResponseEntity.noContent().build();
-//        ResponseEntity<List<AccountShortInfoDTO>> responseEntity = ResponseEntity.ok(dto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(accounts.getTotalElements()));
-
-//        responseEntity.getHeaders().add("X-Total-Count", String.valueOf(accounts.getTotalElements()));
         return new ResponseEntity<>(dto, headers, HttpStatus.OK);
     }
 
@@ -54,7 +55,8 @@ public class AccountController {
     public ResponseEntity<AccountInfoDTO> getAccountById(@PathVariable("id") Long id) {
 
         Account account = accountService.getAccountById(id);
-        return ResponseEntity.ok(AccountMapper.mapToDTO(account));
+        List<UserRole> userRoles = userService.getUserRolesById(account.getUser().getId());
+        return ResponseEntity.ok(AccountMapper.mapToDTO(account, userRoles));
     }
 
     @GetMapping("/{id}/accesses")
