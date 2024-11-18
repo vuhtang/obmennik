@@ -1,5 +1,6 @@
 package org.highload.controller;
 
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.highload.dto.AccountAccessesDTO;
 import org.highload.dto.AccountInfoDTO;
@@ -11,12 +12,13 @@ import org.highload.model.stock.Account;
 import org.highload.model.stock.Wallet;
 import org.highload.service.AccountService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
+//import javax.validation.constraints.Max;
 import java.util.List;
 import java.util.Set;
 
@@ -32,21 +34,27 @@ public class AccountController {
 
     @GetMapping("/")
     public ResponseEntity<List<AccountShortInfoDTO>> getAllAccounts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") @Max(50) int size
+            @RequestParam(defaultValue = "0", name = "page") int page,
+            @RequestParam(defaultValue = "10", name = "size") @Max(50) int size
     ) {
 
         Page<Account> accounts = accountService.getAllAccounts(page, size);
-        ResponseEntity<List<AccountShortInfoDTO>> responseEntity = ResponseEntity.ok(accountMapper.mapListToShortDTO(accounts.toList()));
-        responseEntity.getHeaders().add("X-Total-Count", String.valueOf(accounts.getTotalElements()));
-        return responseEntity;
+        List<AccountShortInfoDTO> dto = accountMapper.mapListToShortDTO(accounts.toList());
+        if (dto.isEmpty())
+            return ResponseEntity.noContent().build();
+//        ResponseEntity<List<AccountShortInfoDTO>> responseEntity = ResponseEntity.ok(dto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(accounts.getTotalElements()));
+
+//        responseEntity.getHeaders().add("X-Total-Count", String.valueOf(accounts.getTotalElements()));
+        return new ResponseEntity<>(dto, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AccountInfoDTO> getAccountById(@PathVariable("id") Long id) {
 
         Account account = accountService.getAccountById(id);
-        return ResponseEntity.ok(accountMapper.mapToDTO(account));
+        return ResponseEntity.ok(AccountMapper.mapToDTO(account));
     }
 
     @GetMapping("/{id}/accesses")

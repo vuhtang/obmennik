@@ -50,10 +50,10 @@ public class AccountService {
     public void addAccountWallet(Long id, String privateKey) {
         Account account = accountRepository.findById(id).orElseThrow();
 
-        Wallet entity = Wallet.builder()
-                .privateKey(privateKey)
-                .account(account)
-                .build();
+        Wallet entity = new Wallet(account);
+//                .privateKey(privateKey)
+//                .account(account)
+//                .build();
         walletRepository.save(entity);
     }
 

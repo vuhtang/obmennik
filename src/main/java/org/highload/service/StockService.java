@@ -1,7 +1,7 @@
 package org.highload.service;
 
 import lombok.RequiredArgsConstructor;
-import org.highload.exceptions.WeHaveNoManyyyException;
+import org.highload.exceptions.WeHaveNoManeyException;
 import org.highload.model.stock.CoinToWallet;
 import org.highload.model.stock.StockAccountBalance;
 import org.highload.repository.CoinToWalletRepository;
@@ -24,7 +24,7 @@ public class StockService {
 
         Long currentAmount = stockAccountBalance.getAmount();
         if (stockAccountBalance.getCoin().getId().equals(coinIdToBuy) && currentAmount < amount) {
-            throw new WeHaveNoManyyyException("We no have money, sorry :((");
+            throw new WeHaveNoManeyException("We no have money, sorry :((");
         }
         stockAccountBalance.setAmount(currentAmount - amount);
         stockRepository.save(stockAccountBalance);

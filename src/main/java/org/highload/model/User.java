@@ -15,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "surname")
     private String surname;
@@ -29,7 +29,7 @@ public class User {
     @Column(name = "dob")
     private Date dateOfBirth;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(
             name = "customer_to_role",
             joinColumns = { @JoinColumn(name = "customer_id") },

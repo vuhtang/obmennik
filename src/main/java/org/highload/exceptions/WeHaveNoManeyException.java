@@ -3,6 +3,6 @@ package org.highload.exceptions;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class WeHaveNoManyyyException extends RuntimeException{
+public class WeHaveNoManeyException extends RuntimeException{
     private final String message;
 }
