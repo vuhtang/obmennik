@@ -22,16 +22,9 @@ public class UserService {
     private final UserRoleRepository userRoleRepository;
 
     public User createTestUser() {
-//        userRoleRepository.save(new UserRole())
         return userRepository.save(
                 new User(1L, "Stas", "Stasyamba", "nefor2007@mail.ru", Date.valueOf(LocalDate.now()), Set.of())
         );
-//                User.builder()
-//                        .name()
-//                        .surname("Stasyamba")
-//                        .email("nefor2007@mail.ru")
-//                        .dateOfBirth(Date.valueOf(LocalDate.now()))
-//                        .build());
     }
 
     public User getUserById(Long id) {
