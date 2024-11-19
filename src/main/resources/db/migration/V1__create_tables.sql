@@ -89,7 +89,8 @@ create table if not exists fiat_wallet (
 
 create table if not exists wallet (
     id          serial primary key,
-    account_id  serial references account (id) on delete cascade
+    account_id  serial references account (id) on delete cascade,
+    private_key varchar(100) not null
 );
 
 create table if not exists coin (

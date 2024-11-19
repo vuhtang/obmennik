@@ -19,12 +19,12 @@ public class StockService {
     private final CoinToWalletRepository coinToWalletRepository;
 
     @Transactional
-    public void buyCoinByFiat(Long id, Long coinIdToBuy, Long amount, Long userFiatId) {
+    public void buyCoinByFiat(Long id, Long coinIdToBuy, Long amount, Long userFiatId) throws WeHaveNoManeyException{
         StockAccountBalance stockAccountBalance = stockRepository.findById(id).orElseThrow();
 
         Long currentAmount = stockAccountBalance.getAmount();
         if (stockAccountBalance.getCoin().getId().equals(coinIdToBuy) && currentAmount < amount) {
-            throw new WeHaveNoManeyException("We no have money, sorry :((");
+            throw new WeHaveNoManeyException("We have no money, sorry :((");
         }
         stockAccountBalance.setAmount(currentAmount - amount);
         stockRepository.save(stockAccountBalance);
