@@ -80,10 +80,9 @@ class AccountControllerTest {
 
 
     @Test
-    public void testAddAccountWallet() throws Exception{
+    public void testAddAccountWallet(){
         RestAssured.baseURI = "http://localhost:" + port;
 
-        // Получаем ID первого аккаунта
         String privateKey = generateMockPrivateKey();
 
         given()
@@ -95,7 +94,6 @@ class AccountControllerTest {
                 .then()
                 .statusCode(201);
 
-        // Проверяем, что кошелек добавлен
         RestAssured.get("/accounts/{id}/wallets", 1).then()
                 .statusCode(200)
                 .body("size()", equalTo(1));
