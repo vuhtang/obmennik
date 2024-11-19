@@ -8,7 +8,6 @@ import org.highload.dto.AccountShortInfoDTO;
 import org.highload.dto.WalletDTO;
 import org.highload.mappers.AccountMapper;
 import org.highload.mappers.AccountWalletsMapper;
-import org.highload.model.User;
 import org.highload.model.roles.UserRole;
 import org.highload.model.stock.Account;
 import org.highload.model.stock.Wallet;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 //import javax.validation.constraints.Max;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/accounts")
@@ -62,15 +60,16 @@ public class AccountController {
     @GetMapping("/{id}/accesses")
     public ResponseEntity<AccountAccessesDTO> getAccountAccesses(@PathVariable("id") Long id) {
 
-        Set<String> accesses = accountService.getAccountAccesses(id);
+        List<String> accesses = accountService.getAccountAccesses(id);
         return ResponseEntity.ok(new AccountAccessesDTO(accesses));
     }
 
     @GetMapping("/{id}/wallets")
-    public ResponseEntity<Set<WalletDTO>> getAccountWallets(@PathVariable("id") Long id) {
+    public ResponseEntity<List<WalletDTO>> getAccountWallets(@PathVariable("id") Long id) {
 
-        Set<Wallet> wallets = accountService.getAccountWallet(id);
-        return ResponseEntity.ok(accountWalletsMapper.mapListToDTO(wallets));
+        List<Wallet> wallets = accountService.getAccountWallets(id);
+
+        return ResponseEntity.ok(accountService.getAccountWalletsDTO(wallets));
     }
 
     @PostMapping("/{id}/wallets")

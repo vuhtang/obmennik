@@ -3,10 +3,10 @@ package org.highload.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class AccountAccessesDTO {
-    private Set<String> accesses;
+    private List<String> accesses;
 }

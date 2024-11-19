@@ -12,9 +12,9 @@ public class ControlAccess {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
     @ManyToMany(mappedBy = "accesses")

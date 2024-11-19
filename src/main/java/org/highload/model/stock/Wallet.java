@@ -20,7 +20,7 @@ public class Wallet {
 
 //    private String privateKey;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
@@ -29,5 +29,19 @@ public class Wallet {
 
     public Wallet(Account account) {
         this.account = account;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (obj instanceof Wallet) {
+            return this.id.equals(((Wallet) obj).id);
+        } else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
     }
 }

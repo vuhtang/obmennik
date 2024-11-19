@@ -1,9 +1,13 @@
 package org.highload.service;
 
 import lombok.RequiredArgsConstructor;
+import org.highload.dto.WalletDTO;
 import org.highload.model.roles.ControlAccess;
+import org.highload.model.roles.UserRole;
 import org.highload.model.stock.Account;
+import org.highload.model.stock.CoinToWallet;
 import org.highload.model.stock.Wallet;
+import org.highload.repository.AccessesRepository;
 import org.highload.repository.AccountRepository;
 import org.highload.repository.WalletRepository;
 import org.springframework.data.domain.Page;
@@ -11,16 +15,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
     private final AccountRepository accountRepository;
-
+    private final AccessesRepository accessesRepository;
     private final WalletRepository walletRepository;
+    private final UserService userService;
 
     public Page<Account> getAllAccounts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -31,20 +37,35 @@ public class AccountService {
         return accountRepository.findById(id).orElseThrow();
     }
 
-    public Set<String> getAccountAccesses(Long id) {
+    public List<String> getAccountAccesses(Long id) {
         Account account = accountRepository.findById(id).orElseThrow();
-        return account.getUser()
-                .getRoles()
-                .stream()
-                .flatMap(userRole -> userRole.getAccesses().stream())
-                .map(ControlAccess::getName)
-                .collect(Collectors.toSet());
+        List<UserRole> userRoles = userService.getUserRolesById(account.getUser().getId());
+
+        List<String> accesses = new ArrayList<>();
+        userRoles.forEach(role -> {
+           List<ControlAccess> controlAccesses = accessesRepository.findAllByUserRoleId(role.getId());
+           controlAccesses.forEach(access -> accesses.add(access.getName()));
+        });
+        return accesses;
     }
 
-    public Set<Wallet> getAccountWallet(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow();
+    public List<Wallet> getAccountWallets(Long id) {
 
-        return account.getWallets();
+        return walletRepository.findAllByAccount_Id(id);
+    }
+
+    public List<WalletDTO> getAccountWalletsDTO(List<Wallet> wallets) {
+        List<WalletDTO> walletDTOS = new ArrayList<>();
+        wallets.forEach(wallet -> {
+            Set<CoinToWallet> coinToWallets = wallet.getCoins();
+            List<WalletDTO.CoinDTO> coinDTOS = coinToWallets.stream().map(coinToWallet -> new WalletDTO.CoinDTO(
+                    coinToWallet.getCoin().getName(),
+                    coinToWallet.getAmount()
+            )).toList();
+            walletDTOS.add(new WalletDTO(wallet.getId(), coinDTOS));
+        });
+
+        return walletDTOS;
     }
 
     public void addAccountWallet(Long id, String privateKey) {

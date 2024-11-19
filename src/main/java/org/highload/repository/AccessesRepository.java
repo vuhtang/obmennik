@@ -1,6 +1,6 @@
 package org.highload.repository;
 
-import org.highload.model.roles.UserRole;
+import org.highload.model.roles.ControlAccess;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
+public interface AccessesRepository extends JpaRepository<ControlAccess, Long> {
 
-    @Query(value = "select * from user_role\n" +
+    @Query(value = "select * from control_access\n" +
             "    where id in (\n" +
-            "        select role_id from customer_to_role where customer_id = ?1\n" +
+            "        select access_id from role_to_access where role_id = ?1\n" +
             "        )", nativeQuery = true)
-    List<UserRole> findAllByUserId(Long id);
+    List<ControlAccess> findAllByUserRoleId(Long id);
 }

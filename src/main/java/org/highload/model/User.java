@@ -38,6 +38,6 @@ public class User {
     )
     private Set<UserRole> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
-    private Set<Account> accounts;
+//    @OneToMany(mappedBy = "user")
+//    private Set<Account> accounts;
 }
