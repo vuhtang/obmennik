@@ -1,7 +1,10 @@
 package org.highload.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.highload.model.roles.UserRole;
 import org.highload.model.stock.Account;
 
@@ -11,6 +14,8 @@ import java.util.Set;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "customer")
 public class User {
 

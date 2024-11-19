@@ -2,6 +2,7 @@ package org.highload.service;
 
 import lombok.RequiredArgsConstructor;
 import org.highload.dto.WalletDTO;
+import org.highload.model.User;
 import org.highload.model.roles.ControlAccess;
 import org.highload.model.roles.UserRole;
 import org.highload.model.stock.Account;
@@ -77,6 +78,13 @@ public class AccountService {
 //                .account(account)
 //                .build();
         walletRepository.save(entity);
+    }
+
+
+    public void createTestData(){
+        Account account = new Account();
+        account.setUser(userService.createTestUser());
+        accountRepository.save(account);
     }
 
 }

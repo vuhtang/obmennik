@@ -1,6 +1,7 @@
 package org.highload.model.roles;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.highload.model.User;
 
@@ -9,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@Builder
 @Table(name = "user_role")
 public class UserRole {
 
