@@ -74,9 +74,7 @@ public class AccountService {
 
         Wallet entity = new Wallet();
         entity.setAccount(account);
-//                .privateKey(privateKey)
-//                .account(account)
-//                .build();
+        entity.setPrivateKey(privateKey);
         walletRepository.save(entity);
     }
 

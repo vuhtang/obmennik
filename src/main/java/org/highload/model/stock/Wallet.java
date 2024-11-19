@@ -18,7 +18,8 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    private String privateKey;
+    @Column(name = "private_key")
+    private String privateKey;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")

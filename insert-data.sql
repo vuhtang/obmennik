@@ -9,10 +9,10 @@ values (1, 1),
        (2, 3),
        (3, 4);
 
-insert into wallet (id, account_id)
-values (1, 1),
-       (2, 2),
-       (3, 3);
+insert into wallet (id, account_id, private_key)
+values (1, 1, 'eqdqwdqwdqwdasd23r1wd1'),
+       (2, 2, 'wefwef24f3498f39fh93'),
+       (3, 3, 'f3oif3eif03eijf03ic3');
 
 insert into fiat_wallet (id, account_id, balance)
 values (1, 1, 1000),
