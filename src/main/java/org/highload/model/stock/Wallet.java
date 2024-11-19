@@ -27,10 +27,6 @@ public class Wallet {
     @OneToMany(mappedBy = "wallet")
     private Set<CoinToWallet> coins;
 
-    public Wallet(Account account) {
-        this.account = account;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null)
