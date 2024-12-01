@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BankService {
     private final FiatRepository fiatRepository;
-
+    //TODO tests
 
     public void depositFiatAccount(Long fiatAccountId, Long depositAmount) {
         FiatWallet fiatWallet = fiatRepository.findById(fiatAccountId).orElseThrow();
