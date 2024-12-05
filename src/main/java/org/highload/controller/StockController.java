@@ -13,25 +13,24 @@ import org.springframework.web.bind.annotation.*;
 public class StockController {
 
     private final StockService stockService;
-//    TODO name of method
-    @PostMapping("/{id}/buyCoinByFiat")
-    public ResponseEntity<HttpStatus> buyCoinByFiat(@PathVariable("id") Long id, @RequestBody BuyCoinTransactionRequestBodyDTO buyCoinTransactionRequestBodyDTO){
-        stockService.buyCoinByFiat(
-                id,
-                buyCoinTransactionRequestBodyDTO.getCoinIdToBuy(),
-                buyCoinTransactionRequestBodyDTO.getAmount(),
-                buyCoinTransactionRequestBodyDTO.getUserFiatId()
-        );
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
-    @PostMapping("/{id}/sellCoinByFiat")
-    public ResponseEntity<HttpStatus> sellCoinByFiat(@PathVariable("id") Long id, @RequestBody BuyCoinTransactionRequestBodyDTO buyCoinTransactionRequestBodyDTO){
-        stockService.sellCoinByFiat(
-                id,
-                buyCoinTransactionRequestBodyDTO.getCoinIdToBuy(),
-                buyCoinTransactionRequestBodyDTO.getAmount()
-        );
+    @PostMapping("/{id}/scripts/{scriptId}/status")
+    public ResponseEntity<HttpStatus> buyCoinByFiat(@PathVariable("id") Long id,@PathVariable("scriptId") String scriptId,@RequestBody BuyCoinTransactionRequestBodyDTO buyCoinTransactionRequestBodyDTO){
+        switch (scriptId){
+            case "buyCoinByFiat":
+                stockService.buyCoinByFiat(
+                        id,
+                        buyCoinTransactionRequestBodyDTO.getCoinIdToBuy(),
+                        buyCoinTransactionRequestBodyDTO.getAmount(),
+                        buyCoinTransactionRequestBodyDTO.getUserFiatId()
+                );
+            case "sellCoinByFiat":
+                stockService.sellCoinByFiat(
+                        id,
+                        buyCoinTransactionRequestBodyDTO.getCoinIdToBuy(),
+                        buyCoinTransactionRequestBodyDTO.getAmount()
+                );
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

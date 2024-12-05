@@ -2,13 +2,11 @@ package org.highload.service;
 
 import lombok.RequiredArgsConstructor;
 import org.highload.dto.WalletDTO;
-import org.highload.model.User;
 import org.highload.model.roles.ControlAccess;
 import org.highload.model.roles.UserRole;
 import org.highload.model.stock.Account;
 import org.highload.model.stock.CoinToWallet;
 import org.highload.model.stock.Wallet;
-import org.highload.repository.AccessesRepository;
 import org.highload.repository.AccountRepository;
 import org.highload.repository.WalletRepository;
 import org.springframework.data.domain.Page;
@@ -25,8 +23,8 @@ import java.util.Set;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final AccessesRepository accessesRepository;
-    private final WalletRepository walletRepository;
+    private final AccessesService accessesService;
+    private final WalletService walletService;
     private final UserService userService;
 
     public Page<Account> getAllAccounts(int page, int size) {
@@ -44,7 +42,7 @@ public class AccountService {
 
         List<String> accesses = new ArrayList<>();
         userRoles.forEach(role -> {
-           List<ControlAccess> controlAccesses = accessesRepository.findAllByUserRoleId(role.getId());
+           List<ControlAccess> controlAccesses = accessesService.getAllByRoleId(role.getId());
            controlAccesses.forEach(access -> accesses.add(access.getName()));
         });
         return accesses;
@@ -52,7 +50,7 @@ public class AccountService {
 
     public List<Wallet> getAccountWallets(Long id) {
 
-        return walletRepository.findAllByAccount_Id(id);
+        return walletService.findByAccountId(id);
     }
 
     public List<WalletDTO> getAccountWalletsDTO(List<Wallet> wallets) {
@@ -75,7 +73,7 @@ public class AccountService {
         Wallet entity = new Wallet();
         entity.setAccount(account);
         entity.setPrivateKey(privateKey);
-        walletRepository.save(entity);
+        walletService.save(entity);
     }
 
 
