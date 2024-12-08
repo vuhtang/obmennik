@@ -1,2 +1,3 @@
 rootProject.name = 'obmennik'
+include 'lab-2'
 
