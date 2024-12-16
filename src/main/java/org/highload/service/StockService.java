@@ -2,8 +2,8 @@ package org.highload.service;
 
 import lombok.RequiredArgsConstructor;
 import org.highload.exceptions.WeHaveNoManeyException;
-import org.highload.model.stock.CoinToWallet;
-import org.highload.model.stock.StockAccountBalance;
+import org.highload.model.CoinToWallet;
+import org.highload.model.StockAccountBalance;
 import org.highload.repository.CoinToWalletRepository;
 import org.highload.repository.StockRepository;
 import org.springframework.stereotype.Service;

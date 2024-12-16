@@ -3,7 +3,7 @@ package org.highload.service;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.highload.model.stock.FiatWallet;
+import org.highload.model.FiatWallet;
 import org.highload.repository.FiatRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

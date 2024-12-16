@@ -132,4 +132,3 @@ create table if not exists coin_exchange_history (
     date                date not null,
     wallet_id         serial references wallet (id) on delete cascade
 );
-

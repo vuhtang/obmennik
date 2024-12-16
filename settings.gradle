@@ -1,2 +1,6 @@
 rootProject.name = 'obmennik'
+//include 'stock'
+//include 'eureka-server'
+//include 'api-gateway'
+//include 'human-resource'
 

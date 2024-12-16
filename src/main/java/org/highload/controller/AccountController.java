@@ -9,8 +9,8 @@ import org.highload.dto.WalletDTO;
 import org.highload.mappers.AccountMapper;
 import org.highload.mappers.AccountWalletsMapper;
 import org.highload.model.roles.UserRole;
-import org.highload.model.stock.Account;
-import org.highload.model.stock.Wallet;
+import org.highload.model.Account;
+import org.highload.model.Wallet;
 import org.highload.service.AccountService;
 import org.highload.service.UserService;
 import org.springframework.data.domain.Page;
@@ -46,7 +46,7 @@ public class AccountController {
             return ResponseEntity.noContent().build();
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(accounts.getTotalElements()));
-        return new ResponseEntity<>(dto, headers, HttpStatus.OK);
+        return Mono new ResponseEntity<>(dto, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

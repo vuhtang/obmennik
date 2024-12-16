@@ -2,15 +2,12 @@ package org.highload.mappers;
 
 import org.highload.dto.AccountInfoDTO;
 import org.highload.dto.AccountShortInfoDTO;
-import org.highload.model.User;
 import org.highload.model.roles.UserRole;
-import org.highload.model.stock.Account;
+import org.highload.model.Account;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.Named;
 
 import java.util.List;
-import java.util.Set;
 
 @Mapper(componentModel = "spring",injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AccountMapper {

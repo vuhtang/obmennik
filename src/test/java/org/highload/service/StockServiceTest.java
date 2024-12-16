@@ -1,10 +1,10 @@
 package org.highload.service;
 
 import org.highload.exceptions.WeHaveNoManeyException;
-import org.highload.model.stock.Coin;
-import org.highload.model.stock.CoinToWallet;
-import org.highload.model.stock.StockAccountBalance;
-import org.highload.model.stock.Wallet;
+import org.highload.model.Coin;
+import org.highload.model.CoinToWallet;
+import org.highload.model.StockAccountBalance;
+import org.highload.model.Wallet;
 import org.highload.repository.CoinToWalletRepository;
 import org.highload.repository.StockRepository;
 import org.junit.jupiter.api.BeforeEach;
