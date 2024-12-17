@@ -15,7 +15,6 @@ public class StockService {
     public static final Long STOCK_FIAT_ACCOUNT_ID = 2L;
     private final StockRepository stockRepository;
     private final BankService bankService;
-
     private final CoinToWalletRepository coinToWalletRepository;
 
     @Transactional

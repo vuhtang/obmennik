@@ -3,4 +3,5 @@ rootProject.name = 'obmennik'
 //include 'eureka-server'
 //include 'api-gateway'
 //include 'human-resource'
-
+//include 'banking'
+include(":database-common")

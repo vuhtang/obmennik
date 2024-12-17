@@ -28,6 +28,7 @@ public class AccountService {
 
     public Page<Account> getAllAccounts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+        accountRepository.findAll()
         return accountRepository.findAll(pageable);
     }
 
@@ -47,9 +48,9 @@ public class AccountService {
         return accesses;
     }
 
-    public List<Wallet> getAccountWallets(Long id) {
+    public List<Wallet> getAccountWallets(Long accountId) {
 
-        return walletService.findByAccountId(id);
+        return walletService.findByAccountId(accountId);
     }
 
     public List<WalletDTO> getAccountWalletsDTO(List<Wallet> wallets) {

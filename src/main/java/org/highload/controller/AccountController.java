@@ -46,7 +46,7 @@ public class AccountController {
             return ResponseEntity.noContent().build();
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(accounts.getTotalElements()));
-        return Mono new ResponseEntity<>(dto, headers, HttpStatus.OK);
+        return new ResponseEntity<>(dto, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

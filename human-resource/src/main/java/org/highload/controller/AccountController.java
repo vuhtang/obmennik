@@ -46,36 +46,36 @@ public class AccountController {
         return Mono.just(new ResponseEntity<>(dto, headers, HttpStatus.OK));
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<AccountInfoDTO> getAccountById(@PathVariable("id") Long id) {
-//
-//        Account account = accountService.getAccountById(id);
-//        List<UserRole> userRoles = userService.getUserRolesById(account.getUser().getId());
-//        return ResponseEntity.ok(AccountMapper.mapToDTO(account, userRoles));
-//    }
-//
-//    @GetMapping("/{id}/accesses")
-//    public ResponseEntity<AccountAccessesDTO> getAccountAccesses(@PathVariable("id") Long id) {
-//
-//        List<String> accesses = accountService.getAccountAccesses(id);
-//        return ResponseEntity.ok(new AccountAccessesDTO(accesses));
-//    }
-//
-//    @GetMapping("/{id}/wallets")
-//    public ResponseEntity<List<WalletDTO>> getAccountWallets(@PathVariable("id") Long id) {
-//
-//        List<Wallet> wallets = accountService.getAccountWallets(id);
-//
-//        return ResponseEntity.ok(accountService.getAccountWalletsDTO(wallets));
-//    }
-//
-//    @PostMapping("/{id}/wallets")
-//    public ResponseEntity<Void> addAccountWallet(@PathVariable("id") Long id, @RequestBody String privateKey) {
-//        try {
-//            accountService.addAccountWallet(id, privateKey);
-//            return ResponseEntity.status(HttpStatus.CREATED).build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountInfoDTO> getAccountById(@PathVariable("id") Long id) {
+
+        Account account = accountService.getAccountById(id);
+        List<UserRole> userRoles = userService.getUserRolesById(account.getUser().getId());
+        return ResponseEntity.ok(AccountMapper.mapToDTO(account, userRoles));
+    }
+
+    @GetMapping("/{id}/accesses")
+    public ResponseEntity<AccountAccessesDTO> getAccountAccesses(@PathVariable("id") Long id) {
+
+        List<String> accesses = accountService.getAccountAccesses(id);
+        return ResponseEntity.ok(new AccountAccessesDTO(accesses));
+    }
+
+    @GetMapping("/{id}/wallets")
+    public ResponseEntity<List<WalletDTO>> getAccountWallets(@PathVariable("id") Long id) {
+
+        List<Wallet> wallets = accountService.getAccountWallets(id);
+
+        return ResponseEntity.ok(accountService.getAccountWalletsDTO(wallets));
+    }
+
+    @PostMapping("/{id}/wallets")
+    public ResponseEntity<Void> addAccountWallet(@PathVariable("id") Long id, @RequestBody String privateKey) {
+        try {
+            accountService.addAccountWallet(id, privateKey);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }

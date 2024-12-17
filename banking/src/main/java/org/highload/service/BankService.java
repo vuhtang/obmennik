@@ -24,6 +24,7 @@ public class BankService {
                 })
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("Fiat with id $fiatAccountId not found")));
 
+
 //        FiatWallet fiatWallet = fiatRepository.findById(fiatAccountId).;
 //        Long balance = fiatWallet.getBalance();
 //        fiatWallet.setBalance(balance + depositAmount);
