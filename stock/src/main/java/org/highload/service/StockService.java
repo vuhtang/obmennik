@@ -2,6 +2,8 @@ package org.highload.service;
 
 import lombok.RequiredArgsConstructor;
 //import org.highload.exceptions.WeHaveNoManeyException;
+import org.highload.client.BankingClient;
+import org.highload.dto.BuyCoinTransactionRequestBodyDTO;
 import org.highload.exception.WeHaveNoManeyException;
 import org.highload.model.CoinToWallet;
 import org.highload.model.StockAccountBalance;
@@ -15,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StockService {
     public static final Long STOCK_FIAT_ACCOUNT_ID = 2L;
     private final StockRepository stockRepository;
-    private final BankService bankService;
-
+    private final BankingClient bankingClient;
     private final CoinToWalletRepository coinToWalletRepository;
 
     @Transactional
@@ -30,7 +31,7 @@ public class StockService {
         stockAccountBalance.setAmount(currentAmount - amount);
         stockRepository.save(stockAccountBalance);
 
-        bankService.depositFiatAccount(userFiatId, amount);
+        bankingClient.changeFiatWalletBalance(id,"depositFiatAccount", BuyCoinTransactionRequestBodyDTO.builder().userFiatId(userFiatId).amount(amount).build());
     }
 
     @Transactional
@@ -45,8 +46,7 @@ public class StockService {
         foundCryptoWalletByAccountWalletId.setAmount(foundCryptoWalletByAccountWalletId.getAmount() + amount);
 
         coinToWalletRepository.save(foundCryptoWalletByAccountWalletId);
-
-        bankService.takeFiatAccount(STOCK_FIAT_ACCOUNT_ID, amount);
+        bankingClient.changeFiatWalletBalance(id,"takeFiatAccount", BuyCoinTransactionRequestBodyDTO.builder().userFiatId(accountWallerId).amount(amount).build());
     }
 
 

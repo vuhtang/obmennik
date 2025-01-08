@@ -2,6 +2,7 @@ package org.highload.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.highload.common.model.Account;
 
 @Data
 @Entity

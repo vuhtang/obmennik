@@ -3,6 +3,7 @@ package org.highload.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.highload.common.model.Account;
 
 import java.util.Set;
 

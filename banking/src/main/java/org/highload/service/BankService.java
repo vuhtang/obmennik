@@ -16,37 +16,24 @@ public class BankService {
     //TODO tests
 
     public void depositFiatAccount(Long fiatAccountId, Long depositAmount) {
-
-        fiatRepository.findById(fiatAccountId)
-                .flatMap(fiatWallet -> {
-                    fiatWallet.setBalance(fiatWallet.getBalance() - depositAmount);
-                    return fiatRepository.save(fiatWallet);
-                })
-                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Fiat with id $fiatAccountId not found")));
-
-
-//        FiatWallet fiatWallet = fiatRepository.findById(fiatAccountId).;
-//        Long balance = fiatWallet.getBalance();
-//        fiatWallet.setBalance(balance + depositAmount);
-//        fiatRepository.save(fiatWallet);
+        FiatWallet fiatWallet = fiatRepository.findById(fiatAccountId).blockOptional().orElseThrow();
+        Long balance = fiatWallet.getBalance();
+        Long newBalance = balance + depositAmount;
+        fiatRepository.updateBalanceById(fiatAccountId, newBalance).block();
     }
 
     public void takeFiatAccount(Long fiatAccountId, Long takeAmount) {
-         fiatRepository.findById(fiatAccountId)
-                .flatMap(fiatWallet -> {
-                    fiatWallet.setBalance(fiatWallet.getBalance() - takeAmount);
-                    return fiatRepository.save(fiatWallet);
-                })
+        Mono<FiatWallet> fiatWallet = fiatRepository.findById(fiatAccountId)
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("Fiat with id $fiatAccountId not found")));
-//           TODO Как заапдейтить на моно
-//        Long balance = fiatWallet.getBalance();
-//        fiatWallet.setBalance(balance - takeAmount);
-//        fiatRepository.save()
-//        fiatRepository.save(fiatWallet);
+        fiatWallet.flatMap(fiatWallet1 -> {
+            Long balance = fiatWallet1.getBalance();
+            long newBalance = balance - takeAmount;
+            return fiatRepository.updateBalanceById(fiatAccountId, newBalance);
+        }).block();
     }
 
-    public Mono<Long> checkFiatBalanceFromWallet(Long fiatWalletId){
-        Mono<FiatWallet> fiatWallet = this.fiatRepository.findById(fiatWalletId);
+    public Mono<Long> checkFiatBalanceFromWallet(Long fiatWalletId) {
+        Mono<FiatWallet> fiatWallet = this.fiatRepository.findById(fiatWalletId).switchIfEmpty(Mono.error(new ResourceNotFoundException("Fiat Wallet with id $fiatAccountId not found")));
         return fiatWallet.map(FiatWallet::getBalance);
     }
 }

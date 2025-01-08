@@ -22,6 +22,7 @@ ext {
 }
 
 dependencies {
+	implementation files('libs/database-common-0.0.1-SNAPSHOT-plain.jar')
 	implementation("org.springframework.cloud:spring-cloud-starter-config:4.1.3")
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -36,9 +37,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.2.5'
 	implementation 'org.postgresql:postgresql:42.7.2'
 	runtimeOnly 'org.postgresql:postgresql'
-
-	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
-	implementation("org.postgresql:r2dbc-postgresql:1.0.7.RELEASE")
+//	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+//	implementation("org.postgresql:r2dbc-postgresql:1.0.7.RELEASE")
 }
 
 dependencyManagement {

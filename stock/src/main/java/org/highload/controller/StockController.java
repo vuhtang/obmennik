@@ -1,6 +1,7 @@
 package org.highload.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.highload.client.BankingClient;
 import org.highload.dto.BuyCoinTransactionRequestBodyDTO;
 import org.highload.service.StockService;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class StockController {
 
     private final StockService stockService;
-
     @PostMapping("/{id}/scripts/{scriptId}/status")
     public ResponseEntity<HttpStatus> buyCoinByFiat(@PathVariable("id") Long id,@PathVariable("scriptId") String scriptId,@RequestBody BuyCoinTransactionRequestBodyDTO buyCoinTransactionRequestBodyDTO){
         switch (scriptId){
@@ -33,9 +33,4 @@ public class StockController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    @GetMapping("/testFeign")
-//    public ResponseEntity<AccountShortInfoDTO> test(){
-//        return ResponseEntity.ok(AccountShortInfoDTO.builder().email("a").build());
-//    }
 }
