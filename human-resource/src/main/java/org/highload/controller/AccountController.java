@@ -2,12 +2,16 @@ package org.highload.controller;
 
 import lombok.RequiredArgsConstructor;
 
-import org.highload.client.StockClient;
+import org.highload.dto.AccountAccessesDTO;
+import org.highload.dto.AccountInfoDTO;
 import org.highload.dto.AccountShortInfoDTO;
 
+import org.highload.dto.WalletDTO;
 import org.highload.mappers.AccountMapper;
 import org.highload.mappers.AccountWalletsMapper;
 import org.highload.model.Account;
+import org.highload.model.Wallet;
+import org.highload.model.roles.UserRole;
 import org.highload.service.AccountService;
 import org.highload.service.UserService;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +34,6 @@ public class AccountController {
     private final AccountMapper accountMapper;
     private final AccountWalletsMapper accountWalletsMapper;
     private final UserService userService;
-    private final StockClient stockClient;
 
     @GetMapping("/")
     public Mono<ResponseEntity<List<AccountShortInfoDTO>>> getAllAccounts(

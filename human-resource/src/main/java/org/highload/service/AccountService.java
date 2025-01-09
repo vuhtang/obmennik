@@ -28,7 +28,6 @@ public class AccountService {
 
     public Page<Account> getAllAccounts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        accountRepository.findAll()
         return accountRepository.findAll(pageable);
     }
 
