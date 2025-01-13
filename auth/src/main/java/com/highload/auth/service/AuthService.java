@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -42,7 +43,7 @@ public class AuthService {
 
     public JwtTokenDto register(UserRegisterRequestDto request) throws UserAlreadyPresentException {
         if (userRepository.findUserByEmail(request.email()).isPresent())
-            throw new UserAlreadyPresentException();
+            throw new UserAlreadyPresentException("User with such email is already presented");
 
         Optional<UserRole> userRole = rolesRepository.findUserRoleByName("user");
         if (userRole.isEmpty())
@@ -50,13 +51,15 @@ public class AuthService {
 
         Set<UserRole> roles = new HashSet<>();
         roles.add(userRole.get());
-        User user = userRepository.saveAndFlush(User.builder()
+        User user = User.builder()
                 .name(request.name())
                 .surname(request.surname())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .roles(roles)
-                .build());
+                .dateOfBirth(Date.valueOf(request.dateOfBirth()))
+                .build();
+        userRepository.saveAndFlush(user);
 
         String jwt = jwtService.generateToken(user);
         return new JwtTokenDto(jwt, user.getId());

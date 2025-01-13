@@ -18,7 +18,7 @@ create table if not exists customer
     name     varchar(40) not null,
     surname  varchar(40) not null,
     email    varchar(50) not null,
-    password varchar(50) not null,
+    password varchar(255) not null,
     dob      Date        not null
 );
 
