@@ -1,5 +1,6 @@
 package com.highload.auth.controller;
 
+import com.highload.auth.exeptions.AuthenticationException;
 import com.highload.auth.exeptions.UserAlreadyPresentException;
 import com.highload.auth.model.dto.JwtTokenDto;
 import com.highload.auth.model.dto.UserRegisterRequestDto;
@@ -17,7 +18,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenDto> login(@RequestBody UserRequestDto request) {
+    public ResponseEntity<JwtTokenDto> login(@RequestBody UserRequestDto request) throws AuthenticationException {
         return ResponseEntity.ok(authService.login(request));
     }
 

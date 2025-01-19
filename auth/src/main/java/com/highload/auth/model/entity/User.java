@@ -81,7 +81,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
-
-//    @OneToMany(mappedBy = "user")
-//    private Set<Account> accounts;
 }
