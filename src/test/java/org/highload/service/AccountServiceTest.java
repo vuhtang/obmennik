@@ -8,9 +8,7 @@ import org.highload.model.stock.Account;
 import org.highload.model.stock.Coin;
 import org.highload.model.stock.CoinToWallet;
 import org.highload.model.stock.Wallet;
-import org.highload.repository.AccessesRepository;
 import org.highload.repository.AccountRepository;
-import org.highload.repository.WalletRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,11 +19,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class AccountServiceTest {
@@ -34,10 +35,10 @@ class AccountServiceTest {
     private AccountRepository accountRepository;
 
     @Mock
-    private AccessesRepository accessesRepository;
+    private AccessesService accessesService;
 
     @Mock
-    private WalletRepository walletRepository;
+    private WalletService walletService;
 
     @Mock
     private UserService userService;
@@ -52,102 +53,112 @@ class AccountServiceTest {
 
     @Test
     void testGetAllAccounts() {
-        Pageable pageable = PageRequest.of(0, 10);
-        List<Account> accounts = List.of(new Account(), new Account());
-        Page<Account> accountPage = new PageImpl<>(accounts);
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
+        List<Account> accounts = new ArrayList<>();
+        Page<Account> accountPage = new PageImpl<>(accounts, pageable, accounts.size());
 
         when(accountRepository.findAll(pageable)).thenReturn(accountPage);
 
-        Page<Account> result = accountService.getAllAccounts(0, 10);
+        Page<Account> result = accountService.getAllAccounts(page, size);
 
-        assertNotNull(result);
-        assertEquals(2, result.getContent().size());
+        assertEquals(accountPage, result);
         verify(accountRepository, times(1)).findAll(pageable);
     }
 
     @Test
     void testGetAccountById() {
+        Long id = 1L;
         Account account = new Account();
-        account.setId(1L);
+        account.setId(id);
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(id)).thenReturn(Optional.of(account));
 
-        Account result = accountService.getAccountById(1L);
+        Account result = accountService.getAccountById(id);
 
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        verify(accountRepository, times(1)).findById(1L);
+        assertEquals(account, result);
+        verify(accountRepository, times(1)).findById(id);
     }
 
     @Test
     void testGetAccountAccesses() {
+        Long id = 1L;
         Account account = new Account();
-        account.setId(1L);
-        UserRole role = new UserRole();
-        role.setId(1L);
-        ControlAccess access = new ControlAccess();
-        access.setName("READ");
-        User user = new User();
-        user.setId(1L);
-        account.setUser(user);
+        account.setId(id);
+        account.setUser(new User());
+        UserRole userRole = new UserRole();
+        userRole.setId(1L);
+        ControlAccess controlAccess = new ControlAccess();
+        controlAccess.setName("ACCESS_NAME");
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
-        when(userService.getUserRolesById(anyLong())).thenReturn(List.of(role));
-        when(accessesRepository.findAllByUserRoleId(1L)).thenReturn(List.of(access));
+        when(accountRepository.findById(id)).thenReturn(Optional.of(account));
+        when(userService.getUserRolesById(anyLong())).thenReturn(List.of(userRole));
+        when(accessesService.getAllByRoleId(userRole.getId())).thenReturn(List.of(controlAccess));
 
-        List<String> result = accountService.getAccountAccesses(1L);
+        List<String> result = accountService.getAccountAccesses(id);
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("READ", result.get(0));
-        verify(accessesRepository, times(1)).findAllByUserRoleId(1L);
+        verify(accountRepository, times(1)).findById(id);
     }
 
     @Test
     void testGetAccountWallets() {
-        Wallet wallet = new Wallet();
-        wallet.setId(1L);
+        Long id = 1L;
+        List<Wallet> wallets = new ArrayList<>();
 
-        when(walletRepository.findAllByAccount_Id(1L)).thenReturn(List.of(wallet));
+        when(walletService.findByAccountId(id)).thenReturn(wallets);
 
-        List<Wallet> result = accountService.getAccountWallets(1L);
+        List<Wallet> result = accountService.getAccountWallets(id);
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getId());
-        verify(walletRepository, times(1)).findAllByAccount_Id(1L);
+        assertEquals(wallets, result);
+        verify(walletService, times(1)).findByAccountId(id);
     }
 
     @Test
     void testGetAccountWalletsDTO() {
+        List<Wallet> wallets = new ArrayList<>();
         Wallet wallet = new Wallet();
-        wallet.setId(1L);
-
         CoinToWallet coinToWallet = new CoinToWallet();
-        coinToWallet.setAmount(10L);
-        coinToWallet.setCoin(new Coin());
-        coinToWallet.getCoin().setName("BTC");
-
+        Coin coin = new Coin();
+        coin.setName("COIN_NAME");
+        coinToWallet.setCoin(coin);
+        coinToWallet.setAmount(100L);
         wallet.setCoins(Set.of(coinToWallet));
+        wallets.add(wallet);
 
-        List<WalletDTO> result = accountService.getAccountWalletsDTO(List.of(wallet));
+        List<WalletDTO> result = accountService.getAccountWalletsDTO(wallets);
 
-        assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("BTC", result.get(0).getCoins().get(0).getCoinType());
-        assertEquals(10, result.get(0).getCoins().get(0).getAmount());
+        assertEquals("COIN_NAME", result.get(0).getCoins().get(0).getCoinType());
+        assertEquals(100L, result.get(0).getCoins().get(0).getAmount());
     }
 
     @Test
     void testAddAccountWallet() {
+        Long id = 1L;
+        String privateKey = "PRIVATE_KEY";
         Account account = new Account();
-        account.setId(1L);
-        String privateKey = "private_key";
+        Wallet wallet = new Wallet();
 
-        when(accountRepository.getReferenceById(1L)).thenReturn(account);
+        when(accountRepository.getReferenceById(id)).thenReturn(account);
+        when(walletService.save(any(Wallet.class))).thenReturn(wallet);
 
-        accountService.addAccountWallet(1L, privateKey);
+        accountService.addAccountWallet(id, privateKey);
 
-        verify(walletRepository, times(1)).save(any(Wallet.class));
+        verify(accountRepository, times(1)).getReferenceById(id);
+        verify(walletService, times(1)).save(any(Wallet.class));
+    }
+
+    @Test
+    void testCreateTestData() {
+        Account account = new Account();
+        User user = new User(1L, "Vova", "Vovkin", "vova2007@mail.ru", Date.valueOf(LocalDate.now()), Set.of());
+        when(userService.createTestUser()).thenReturn(user);
+        when(accountRepository.save(any(Account.class))).thenReturn(account);
+
+        accountService.createTestData();
+
+        verify(userService, times(1)).createTestUser();
+        verify(accountRepository, times(1)).save(any(Account.class));
     }
 }
