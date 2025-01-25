@@ -152,10 +152,37 @@ services:
       AUTH_URL: http://auth:8088/
       ACCOUNTS_URL: http://human-resource:8083/
 
+  storage:
+    image: minio/minio:latest
+    container_name: storage
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=ROOTUSER
+      - MINIO_ROOT_PASSWORD=CHANGEME123
+    volumes:
+      - ./highload_storage:/data
+    networks:
+      - backend
 
+  file-server:
+    build: ./file-server
+    ports:
+      - "8077:8077"
+    networks:
+      - backend
+    depends_on:
+      - configs
+      - storage
+    environment:
+      EUREKA_URL: http://eureka:8081/eureka
+      CONFIG_URL: http://configs:8888/
+      STOCK_URL: http://stock:8089/
 
 volumes:
   postgres-data:
+  file-server-data:
 
 networks:
   backend:
