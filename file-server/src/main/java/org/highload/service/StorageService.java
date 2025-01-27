@@ -2,21 +2,15 @@ package org.highload.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Stream;
+import java.io.InputStream;
 
 public interface StorageService {
 
-    void store(MultipartFile file);
+    String store(MultipartFile file);
 
-    List<URI> loadAll();
+    String loadAll();
 
-    MultipartFile load(String filename);
-
-    void deleteAll();
+    InputStream load(String fileName);
 
 }
 
