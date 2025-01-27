@@ -1,4 +1,4 @@
-package org.highload.human_resource;
+package org.highload.human_resource.unit;
 
 import org.highload.controller.AccountController;
 import org.highload.dto.AccountAccessesDTO;

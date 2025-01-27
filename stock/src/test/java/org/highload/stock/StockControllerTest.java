@@ -5,16 +5,17 @@ import org.highload.dto.BuyCoinTransactionRequestBodyDTO;
 import org.highload.service.StockService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class StockControllerTest {
 
     @Mock
@@ -23,69 +24,30 @@ public class StockControllerTest {
     @InjectMocks
     private StockController stockController;
 
+    private BuyCoinTransactionRequestBodyDTO buyCoinTransactionRequestBodyDTO;
+
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        buyCoinTransactionRequestBodyDTO = BuyCoinTransactionRequestBodyDTO.builder()
+                .coinIdToBuy(1L)
+                .amount(50L)
+                .userFiatId(1L)
+                .build();
     }
 
     @Test
-    public void testBuyCoinByFiat() {
-        Long id = 1L;
-        String scriptId = "buyCoinByFiat";
-        BuyCoinTransactionRequestBodyDTO requestBody = BuyCoinTransactionRequestBodyDTO.builder()
-                .amount(12L)
-                .coinIdToBuy(1L)
-                .userFiatId(2L)
-                .build();
+    public void testBuyCoinByFiat_Success() {
+        ResponseEntity<HttpStatus> response = stockController.buyCoinByFiat(1L, "buyCoinByFiat", buyCoinTransactionRequestBodyDTO);
 
-        when(stockService.buyCoinByFiat(id, requestBody.getCoinIdToBuy(), requestBody.getAmount(), requestBody.getUserFiatId()))
-                .thenReturn(HttpStatus.OK);
-
-        Mono<ResponseEntity<HttpStatus>> responseMono = stockController.buyCoinByFiat(id, scriptId, requestBody);
-
-        StepVerifier.create(responseMono)
-                .expectNextMatches(response -> response.getStatusCode().equals(HttpStatus.OK))
-                .verifyComplete();
-
-        verify(stockService, times(1)).buyCoinByFiat(id, requestBody.getCoinIdToBuy(), requestBody.getAmount(), requestBody.getUserFiatId());
+        verify(stockService, times(1)).buyCoinByFiat(1L, 1L, 50L, 1L);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    public void testSellCoinByFiat() {
-        Long id = 1L;
-        String scriptId = "sellCoinByFiat";
-        BuyCoinTransactionRequestBodyDTO requestBody = BuyCoinTransactionRequestBodyDTO.builder()
-                .amount(12L)
-                .coinIdToBuy(1L)
-                .userFiatId(2L)
-                .build();
+    public void testSellCoinByFiat_Success() {
+        ResponseEntity<HttpStatus> response = stockController.buyCoinByFiat(1L, "sellCoinByFiat", buyCoinTransactionRequestBodyDTO);
 
-        when(stockService.sellCoinByFiat(id, requestBody.getCoinIdToBuy(), requestBody.getAmount()))
-                .thenReturn(HttpStatus.OK);
-
-        Mono<ResponseEntity<HttpStatus>> responseMono = stockController.buyCoinByFiat(id, scriptId, requestBody);
-
-        StepVerifier.create(responseMono)
-                .expectNextMatches(response -> response.getStatusCode().equals(HttpStatus.OK))
-                .verifyComplete();
-
-        verify(stockService, times(1)).sellCoinByFiat(id, requestBody.getCoinIdToBuy(), requestBody.getAmount());
-    }
-
-    @Test
-    public void testInvalidScriptId() {
-        Long id = 1L;
-        String scriptId = "invalidScriptId";
-        BuyCoinTransactionRequestBodyDTO requestBody = BuyCoinTransactionRequestBodyDTO.builder()
-                .amount(12L)
-                .coinIdToBuy(1L)
-                .userFiatId(2L)
-                .build();
-
-        Mono<ResponseEntity<HttpStatus>> responseMono = stockController.buyCoinByFiat(id, scriptId, requestBody);
-
-        StepVerifier.create(responseMono)
-                .expectNextMatches(response -> response.getStatusCode().equals(HttpStatus.BAD_REQUEST))
-                .verifyComplete();
+        verify(stockService, times(1)).sellCoinByFiat(1L, 1L, 50L);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }

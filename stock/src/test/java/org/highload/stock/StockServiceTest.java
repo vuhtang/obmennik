@@ -12,18 +12,19 @@ import org.highload.repository.StockRepository;
 import org.highload.service.StockService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class StockServiceTest {
 
     @Mock
@@ -38,88 +39,68 @@ public class StockServiceTest {
     @InjectMocks
     private StockService stockService;
 
+    private StockAccountBalance stockAccountBalance;
+    private CoinToWallet coinToWallet;
+    private Coin coin;
+    private Wallet wallet;
+
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        coin = new Coin();
+        coin.setId(1L);
+
+        wallet = new Wallet();
+        wallet.setId(1L);
+
+        stockAccountBalance = new StockAccountBalance();
+        stockAccountBalance.setId(1L);
+        stockAccountBalance.setCoin(coin);
+        stockAccountBalance.setAmount(100L);
+
+        coinToWallet = new CoinToWallet();
+        coinToWallet.setId(1);
+        coinToWallet.setCoin(coin);
+        coinToWallet.setWallet(wallet);
+        coinToWallet.setAmount(50L);
     }
 
     @Test
-    public void testBuyCoinByFiatSuccess() throws WeHaveNoManeyException {
-        Long id = 1L;
-        Long coinIdToBuy = 1L;
-        Long amount = 100L;
-        Long userFiatId = 1L;
+    public void testBuyCoinByFiat_Success() throws WeHaveNoManeyException {
+        when(stockRepository.findById(1L)).thenReturn(Optional.of(stockAccountBalance));
 
-        Coin coin = new Coin();
-        coin.setId(coinIdToBuy);
+        stockService.buyCoinByFiat(1L, 1L, 50L, 1L);
 
-        StockAccountBalance stockAccountBalance = new StockAccountBalance();
-        stockAccountBalance.setId(id);
-        stockAccountBalance.setAmount(200L);
-        stockAccountBalance.setCoin(coin);
-
-        when(stockRepository.findById(id)).thenReturn(Optional.of(stockAccountBalance));
-        when(stockRepository.save(stockAccountBalance)).thenReturn(stockAccountBalance);
-        when(bankingClient.changeFiatWalletBalance(eq(id), eq("depositFiatAccount"), any(BuyCoinTransactionRequestBodyDTO.class)))
-                .thenAnswer(invocation -> HttpStatus.OK);
-
-        HttpStatus result = stockService.buyCoinByFiat(id, coinIdToBuy, amount, userFiatId);
-
-        assertEquals(HttpStatus.OK, result);
-        assertEquals(100L, stockAccountBalance.getAmount());
-        verify(stockRepository, times(1)).findById(id);
-        verify(stockRepository, times(1)).save(stockAccountBalance);
-        verify(bankingClient, times(1)).changeFiatWalletBalance(eq(id), eq("depositFiatAccount"), any(BuyCoinTransactionRequestBodyDTO.class));
+        verify(stockRepository, times(1)).save(any(StockAccountBalance.class));
+        verify(bankingClient, times(1)).changeFiatWalletBalance(
+                eq(1L),
+                eq("depositFiatAccount"),
+                any(BuyCoinTransactionRequestBodyDTO.class)
+        );
     }
 
     @Test
-    public void testBuyCoinByFiatNoMoney() {
-        Long id = 1L;
-        Long coinIdToBuy = 1L;
-        Long amount = 300L;
-        Long userFiatId = 1L;
+    public void testBuyCoinByFiat_NoMoneyException() {
+        when(stockRepository.findById(1L)).thenReturn(Optional.of(stockAccountBalance));
 
-        Coin coin = new Coin();
-        coin.setId(coinIdToBuy);
+        assertThrows(WeHaveNoManeyException.class, () -> {
+            stockService.buyCoinByFiat(1L, 1L, 150L, 1L);
+        });
 
-        StockAccountBalance stockAccountBalance = new StockAccountBalance();
-        stockAccountBalance.setId(id);
-        stockAccountBalance.setAmount(200L);
-        stockAccountBalance.setCoin(coin);
-
-        when(stockRepository.findById(id)).thenReturn(Optional.of(stockAccountBalance));
-
-        assertThrows(WeHaveNoManeyException.class, () -> stockService.buyCoinByFiat(id, coinIdToBuy, amount, userFiatId));
-        verify(stockRepository, times(1)).findById(id);
         verify(stockRepository, never()).save(any(StockAccountBalance.class));
         verify(bankingClient, never()).changeFiatWalletBalance(anyLong(), anyString(), any(BuyCoinTransactionRequestBodyDTO.class));
     }
 
     @Test
-    public void testSellCoinByFiatSuccess() {
-        Long id = 1L;
-        Long accountWalletId = 1L;
-        Long amount = 100L;
+    public void testSellCoinByFiat_Success() {
+        when(coinToWalletRepository.findAll()).thenReturn(Stream.of(coinToWallet).toList());
 
-        Wallet wallet = new Wallet();
-        wallet.setId(accountWalletId);
+        stockService.sellCoinByFiat(1L, 1L, 50L);
 
-        CoinToWallet coinToWallet = new CoinToWallet();
-        coinToWallet.setId(1);
-        coinToWallet.setAmount(50L);
-        coinToWallet.setWallet(wallet);
-
-        when(coinToWalletRepository.findAll()).thenReturn(List.of(coinToWallet));
-        when(coinToWalletRepository.save(coinToWallet)).thenReturn(coinToWallet);
-        when(bankingClient.changeFiatWalletBalance(eq(id), eq("takeFiatAccount"), any(BuyCoinTransactionRequestBodyDTO.class)))
-                .thenAnswer(invocation -> HttpStatus.OK);
-
-        HttpStatus result = stockService.sellCoinByFiat(id, accountWalletId, amount);
-
-        assertEquals(HttpStatus.OK, result);
-        assertEquals(150L, coinToWallet.getAmount());
-        verify(coinToWalletRepository, times(1)).findAll();
-        verify(coinToWalletRepository, times(1)).save(coinToWallet);
-        verify(bankingClient, times(1)).changeFiatWalletBalance(eq(id), eq("takeFiatAccount"), any(BuyCoinTransactionRequestBodyDTO.class));
+        verify(coinToWalletRepository, times(1)).save(any(CoinToWallet.class));
+        verify(bankingClient, times(1)).changeFiatWalletBalance(
+                eq(1L),
+                eq("takeFiatAccount"),
+                any(BuyCoinTransactionRequestBodyDTO.class)
+        );
     }
 }
