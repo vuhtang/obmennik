@@ -16,7 +16,7 @@ public class StockController {
     private final StockService stockService;
     @PostMapping("/{id}/scripts/{scriptId}/status")
     public ResponseEntity<HttpStatus> buyCoinByFiat(@PathVariable("id") Long id,@PathVariable("scriptId") String scriptId,@RequestBody BuyCoinTransactionRequestBodyDTO buyCoinTransactionRequestBodyDTO){
-        switch (scriptId){
+        switch (scriptId) {
             case "buyCoinByFiat":
                 stockService.buyCoinByFiat(
                         id,

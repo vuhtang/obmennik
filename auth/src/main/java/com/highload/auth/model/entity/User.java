@@ -21,10 +21,11 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Table(name = "customer")
+@SequenceGenerator(name = "customer_id_seq", sequenceName = "customer_id_seq", allocationSize = 1, initialValue = 100)
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "customer_id_seq")
     private Long id;
 
     @Column(name = "surname")
