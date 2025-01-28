@@ -13,18 +13,32 @@ services:
     restart: always
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "admin", "-d", "exchange" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
 
 
-#  obmennik:
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
-#    ports:
-#      - "8081:8080"
-#    links:
-#      - database
-#    depends_on:
-#      - database
+  obmennik:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - backend
+    environment:
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_URL: jdbc:postgresql://database:5432/exchange
 
 volumes:
   postgres-data:
+
+networks:
+  backend:
