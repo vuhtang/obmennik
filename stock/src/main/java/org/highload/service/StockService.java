@@ -1,7 +1,6 @@
 package org.highload.service;
 
 import lombok.RequiredArgsConstructor;
-//import org.highload.exceptions.WeHaveNoManeyException;
 import org.highload.client.BankingClient;
 import org.highload.dto.BuyCoinTransactionRequestBodyDTO;
 import org.highload.exception.WeHaveNoManeyException;
@@ -9,6 +8,7 @@ import org.highload.model.CoinToWallet;
 import org.highload.model.StockAccountBalance;
 import org.highload.repository.CoinToWalletRepository;
 import org.highload.repository.StockRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +21,7 @@ public class StockService {
     private final CoinToWalletRepository coinToWalletRepository;
 
     @Transactional
-    public void buyCoinByFiat(Long id, Long coinIdToBuy, Long amount, Long userFiatId) throws WeHaveNoManeyException {
+    public HttpStatus buyCoinByFiat(Long id, Long coinIdToBuy, Long amount, Long userFiatId) throws WeHaveNoManeyException {
         StockAccountBalance stockAccountBalance = stockRepository.findById(id).orElseThrow();
 
         Long currentAmount = stockAccountBalance.getAmount();
@@ -32,10 +32,11 @@ public class StockService {
         stockRepository.save(stockAccountBalance);
 
         bankingClient.changeFiatWalletBalance(id,"depositFiatAccount", BuyCoinTransactionRequestBodyDTO.builder().userFiatId(userFiatId).amount(amount).build());
+        return HttpStatus.OK;
     }
 
     @Transactional
-    public void sellCoinByFiat(Long id, Long accountWallerId, Long amount) {
+    public HttpStatus sellCoinByFiat(Long id, Long accountWallerId, Long amount) {
 
         CoinToWallet foundCryptoWalletByAccountWalletId = coinToWalletRepository.findAll()
                 .stream()
@@ -47,6 +48,7 @@ public class StockService {
 
         coinToWalletRepository.save(foundCryptoWalletByAccountWalletId);
         bankingClient.changeFiatWalletBalance(id,"takeFiatAccount", BuyCoinTransactionRequestBodyDTO.builder().userFiatId(accountWallerId).amount(amount).build());
+        return HttpStatus.OK;
     }
 
 
