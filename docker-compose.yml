@@ -40,6 +40,120 @@ services:
     volumes:
       - ./migrations:/liquibase/changelog
 
+  eureka:
+    build: ./eureka-server
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
+    depends_on:
+      - database
+      - liquibase-migrations
+
+  configs:
+    build: ./config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - backend
+    depends_on:
+      - database
+      - liquibase-migrations
+      - eureka
+    environment:
+      EUREKA_URL: http://eureka:8081/eureka
+
+  auth:
+    build: ./auth
+    ports:
+      - "8088:8088"
+    networks:
+      - backend
+    depends_on:
+      - database
+      - liquibase-migrations
+      - configs
+    environment:
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_URL: jdbc:postgresql://database:5432/exchange
+      EUREKA_URL: http://eureka:8081/eureka
+      CONFIG_URL: http://configs:8888/
+
+  banking:
+    build: ./banking
+    ports:
+      - "8084:8084"
+    networks:
+      - backend
+    depends_on:
+      - database
+      - liquibase-migrations
+      - configs
+    environment:
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_URL: r2dbc:postgresql://database:5432/exchange
+      EUREKA_URL: http://eureka:8081/eureka
+      CONFIG_URL: http://configs:8888/
+
+  human-resource:
+    build: ./human-resource
+    ports:
+      - "8083:8083"
+    networks:
+      - backend
+    depends_on:
+      - database
+      - liquibase-migrations
+      - configs
+    environment:
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_URL: jdbc:postgresql://database:5432/exchange
+      EUREKA_URL: http://eureka:8081/eureka
+      CONFIG_URL: http://configs:8888/
+      STOCK_URL: http://stock:8089/
+
+  stock:
+    build: ./stock
+    ports:
+      - "8089:8089"
+    networks:
+      - backend
+    depends_on:
+      - database
+      - liquibase-migrations
+      - configs
+    environment:
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_URL: jdbc:postgresql://database:5432/exchange
+      EUREKA_URL: http://eureka:8081/eureka
+      CONFIG_URL: http://configs:8888/
+      STOCK_URL: http://stock:8089/
+      BANKING_URL: http://banking:8084/
+
+  gateway:
+    build: ./api-gateway
+    ports:
+      - "8082:8082"
+    networks:
+      - backend
+    depends_on:
+      - database
+      - liquibase-migrations
+      - configs
+    environment:
+      EUREKA_URL: http://eureka:8081/eureka
+      CONFIG_URL: http://configs:8888/
+      STOCK_URL: http://stock:8089/
+      BANKING_URL: http://banking:8084/
+      AUTH_URL: http://auth:8088/
+      ACCOUNTS_URL: http://human-resource:8083/
+
+
+
 volumes:
   postgres-data:
 
