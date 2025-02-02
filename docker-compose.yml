@@ -162,9 +162,16 @@ services:
       - MINIO_ROOT_USER=ROOTUSER
       - MINIO_ROOT_PASSWORD=CHANGEME123
     volumes:
-      - ./highload_storage:/data
+      - highload_storage:/data
     networks:
       - backend
+    restart: always
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   file-server:
     build: ./file-server
