@@ -296,8 +296,21 @@ services:
       - controller-1
       - controller-2
       - controller-3
-
-
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    ports:
+      - "9002:9000"  # Порт для доступа к Kafdrop
+    environment:
+      KAFKA_BROKERCONNECT: broker-1:19092,broker-2:19092,broker-3:19092  # Подключение к брокерам Kafka
+#      JVM_OPTS: "-Xms32M -Xmx64M"  # Настройки JVM
+#      SERVER_SERVLET_CONTEXTPATH: "/"  # Контекстный путь (по желанию)
+    networks:
+      - backend
+    depends_on:
+      - broker-1
+      - broker-2
+      - broker-3
 volumes:
   postgres-data:
   file-server-data:
