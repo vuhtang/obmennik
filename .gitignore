@@ -43,3 +43,4 @@ bin/
 .DS_Store
 
 postgres-data
+highload_storage
