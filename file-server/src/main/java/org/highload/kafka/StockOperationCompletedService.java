@@ -17,8 +17,9 @@ public class StockOperationCompletedService {
     public void handleStockOperationCompleted(StockOperationCompleted message){
         System.out.println("Принято");
         System.out.println(message.toString());
+        // todo create document and persist into object storage
     }
-    
+
     @KafkaListener(
             topics = "send-crypto-wallet-has-change",
             groupId = "file-server-consumer-group"

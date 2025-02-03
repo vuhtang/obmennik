@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.highload.datasource.MinioAdapter;
 import org.highload.dto.ObjectDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,7 +49,6 @@ public class ObjectStorageService implements StorageService {
                 list.add(objectDto);
             }
             return objectMapper.writeValueAsString(list);
-//            return objectMapper.writeValueAsString(list);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load list of objects, cause: " + e);
         }
@@ -60,8 +58,6 @@ public class ObjectStorageService implements StorageService {
     public InputStream load(String fileName) throws RuntimeException {
         try {
             return minioAdapter.getObject(fileName);
-
-//            var fileDto = new FileDto(fileName, Base64.getEncoder().encodeToString(stream.readAllBytes()));
         } catch (Exception e) {
             throw new RuntimeException("Failed to load object to storage, cause: " + e);
         }

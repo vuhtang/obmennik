@@ -23,6 +23,7 @@ public class ObjectStorageController {
     @GetMapping(value = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> listUploadedFiles() {
         try {
+            System.out.println("GOT get all REQUEST");
             return ResponseEntity.ok(objectStorageService.loadAll());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -32,7 +33,11 @@ public class ObjectStorageController {
     @GetMapping(value = "/{fileName:.+}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<InputStream> handleFileRequest(@PathVariable String fileName) {
         try {
+            System.out.println("GOT get one REQUEST");
             InputStream resource = objectStorageService.load(fileName);
+            if (resource == null) {
+                return ResponseEntity.noContent().build();
+            }
             HttpHeaders headers = new HttpHeaders();
             headers.setContentDisposition(
                     ContentDisposition.attachment()
@@ -54,6 +59,7 @@ public class ObjectStorageController {
             @Validated @RequestParam("file")MultipartFile file
     ) {
         try {
+            System.out.println("GOT post REQUEST");
             return ResponseEntity.ok(objectStorageService.store(file));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
