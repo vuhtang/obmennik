@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.highload.datasource.MinioAdapter;
 import org.highload.dto.ObjectDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,5 +66,4 @@ public class ObjectStorageService implements StorageService {
             throw new RuntimeException("Failed to load object to storage, cause: " + e);
         }
     }
-
 }
