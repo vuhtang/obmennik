@@ -1,0 +1,48 @@
+name: Human Resource CI
+
+on:
+  push:
+    branches: [ "main", 'lab-*', "dev/ci" ]
+  pull_request:
+    branches: [ "main", 'lab-*' ]
+
+jobs:
+  build:
+    name: Build human-resource service
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./human-resource
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - run: gradle clean bootJar --info
+
+  test:
+    name: Run service's tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./human-resource
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Run test Gradle task
+        run: gradle clean test    
