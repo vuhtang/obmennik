@@ -32,6 +32,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation("org.springframework.boot:spring-boot-starter-websocket")
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//    implementation 'org.springframework.boot:spring-boot-starter-reactor-netty:3.4.2'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation("io.minio:minio:8.5.16")
     compileOnly 'org.projectlombok:lombok'
