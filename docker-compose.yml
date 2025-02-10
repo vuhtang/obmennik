@@ -67,8 +67,6 @@ services:
         condition: service_healthy
       database:
         condition: service_started
-      liquibase-migrations:
-        condition: service_started
     environment:
       EUREKA_URL: http://eureka:8081/eureka
     healthcheck:
@@ -89,8 +87,6 @@ services:
         condition: service_healthy
       database:
         condition: service_started
-      liquibase-migrations:
-        condition: service_started
     environment:
       DB_USERNAME: admin
       DB_PASSWORD: admin
@@ -108,8 +104,6 @@ services:
       configs:
         condition: service_healthy
       database:
-        condition: service_started
-      liquibase-migrations:
         condition: service_started
     environment:
       DB_USERNAME: admin
@@ -129,8 +123,6 @@ services:
         condition: service_healthy
       database:
         condition: service_started
-      liquibase-migrations:
-        condition: service_started
     environment:
       DB_USERNAME: admin
       DB_PASSWORD: admin
@@ -149,8 +141,6 @@ services:
       configs:
         condition: service_healthy
       database:
-        condition: service_started
-      liquibase-migrations:
         condition: service_started
     environment:
       KAFKA_BOOTSTRAP_SERVERS: PLAINTEXT://broker-1:29092,PLAINTEXT://broker-2:39092,PLAINTEXT://broker-3:49092
@@ -172,8 +162,6 @@ services:
       configs:
         condition: service_healthy
       database:
-        condition: service_started
-      liquibase-migrations:
         condition: service_started
     environment:
       EUREKA_URL: http://eureka:8081/eureka

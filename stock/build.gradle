@@ -41,6 +41,7 @@ dependencies {
 
 	testImplementation 'io.projectreactor:reactor-test:3.7.2'
 
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 }
 
 dependencyManagement {

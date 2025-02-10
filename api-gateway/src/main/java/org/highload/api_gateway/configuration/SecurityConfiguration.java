@@ -10,6 +10,9 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -41,6 +44,10 @@ public class SecurityConfiguration {
                 )
                 .authorizeExchange(authorizeExchangeSpec ->
                         authorizeExchangeSpec
+                                .pathMatchers("/swagger-ui/**").permitAll()
+                                .pathMatchers("/swagger-ui.html").permitAll()
+                                .pathMatchers("/webjars/swagger-ui/**").permitAll()
+                                .pathMatchers("/v3/api-docs/**").permitAll()
                                 .pathMatchers("/api/auth/**").permitAll()
                                 .pathMatchers("/accounts/**").hasAuthority(Scopes.ADMIN.scopeName)
                                 .pathMatchers("/banks/**").hasAuthority(Scopes.USER.scopeName)
@@ -48,5 +55,17 @@ public class SecurityConfiguration {
                                 .anyExchange().denyAll())
                 ;
         return http.build();
+    }
+}
+
+@Configuration
+@EnableWebFlux
+class CorsConfig implements WebFluxConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET");
     }
 }

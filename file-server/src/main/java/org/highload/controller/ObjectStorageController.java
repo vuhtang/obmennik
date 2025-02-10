@@ -1,5 +1,7 @@
 package org.highload.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.highload.service.ObjectStorageService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import java.io.InputStream;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
+@Tag(name = "File_server_controller", description = "API for operations with files")
 @RequestMapping("/storage")
 public class ObjectStorageController {
 

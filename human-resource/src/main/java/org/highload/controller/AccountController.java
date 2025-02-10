@@ -1,5 +1,7 @@
 package org.highload.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import org.highload.dto.AccountAccessesDTO;
@@ -28,6 +30,8 @@ import java.util.List;
 @RequestMapping("/accounts")
 @RequiredArgsConstructor
 @Validated
+@SecurityRequirement(name = "Bearer Authentication")
+@Tag(name = "Accounts controller", description = "API for operations with accounts")
 public class AccountController {
 
     private final AccountService accountService;

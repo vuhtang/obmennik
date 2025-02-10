@@ -25,7 +25,6 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.security:spring-security-oauth2-resource-server'
 
-
     implementation files('libs/database-common-0.0.1-SNAPSHOT-plain.jar')
 
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
@@ -50,6 +49,8 @@ dependencies {
 
     implementation 'org.postgresql:postgresql:42.7.2'
     runtimeOnly 'org.postgresql:postgresql'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 }
 
 tasks.named('test') {

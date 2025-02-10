@@ -37,6 +37,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.postgresql:postgresql:42.7.2'
 	runtimeOnly 'org.postgresql:postgresql'
+
+	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.6.0'
 }
 
 dependencyManagement {

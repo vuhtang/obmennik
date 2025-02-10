@@ -1,5 +1,7 @@
 package org.highload.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.highload.client.BankingClient;
 import org.highload.dto.BuyCoinTransactionRequestBodyDTO;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
+@Tag(name = "Stock_controller", description = "API for operations with stock")
 @RequestMapping("/stock")
 public class StockController {
 
