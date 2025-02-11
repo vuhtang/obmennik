@@ -71,7 +71,7 @@ public class BankControllerTest {
 
         when(bankService.checkFiatBalanceFromWallet(fiatWalletId)).thenReturn(Mono.just(balance));
 
-        Mono<Long> result = bankController.getBalanceFromFiatWallet(fiatWalletId);
+        Mono<Long> result = bankController.getBalanceFromFiatWallet(1L, fiatWalletId);
 
         result.subscribe(actualBalance -> assertEquals(balance, actualBalance));
         verify(bankService, times(1)).checkFiatBalanceFromWallet(fiatWalletId);
