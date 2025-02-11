@@ -1,0 +1,30 @@
+name: Gateway CI
+
+on:
+  push:
+    branches: [ "main", 'lab-*', "dev/ci" ]
+  pull_request:
+    branches: [ "main", 'lab-*' ]
+
+jobs:
+  build:
+    name: Build api-gateway service
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./api-gateway
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - run: gradle clean bootJar --info
+ 
