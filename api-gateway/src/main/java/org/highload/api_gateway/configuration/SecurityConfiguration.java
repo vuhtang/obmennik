@@ -52,6 +52,7 @@ public class SecurityConfiguration {
                                 .pathMatchers("/accounts/**").hasAuthority(Scopes.ADMIN.scopeName)
                                 .pathMatchers("/banks/**").hasAuthority(Scopes.USER.scopeName)
                                 .pathMatchers("/stock/**").hasAuthority(Scopes.USER.scopeName)
+                                .pathMatchers("/storage/**").hasAuthority(Scopes.ADMIN.scopeName)
                                 .anyExchange().denyAll())
                 ;
         return http.build();
