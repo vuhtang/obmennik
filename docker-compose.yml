@@ -17,7 +17,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     networks:
       - backend
 
@@ -182,7 +182,7 @@ services:
       - MINIO_ROOT_USER=ROOTUSER
       - MINIO_ROOT_PASSWORD=CHANGEME123
     volumes:
-      - highload-storage-data:/data
+      - ./highload-storage-data:/data
     networks:
       - backend
     restart: always

@@ -9,20 +9,9 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-//@ConfigurationProperties("application.gateway")
-//class GatewayProperties {
-//    @Value("${application.gateway.auth}")
-//    String auth;
-//    String banking;
-//    String stock;
-//    String account;
-//}
-
 @RequiredArgsConstructor
 @Configuration
-//@EnableConfigurationProperties(GatewayProperties.class)
 public class GatewayConfiguration {
-//    private final GatewayProperties gatewayProperties;
 
     @Value("${application.gateway.auth}")
     String auth;
@@ -35,6 +24,9 @@ public class GatewayConfiguration {
 
     @Value("${application.gateway.accounts}")
     String accounts;
+
+    @Value("${application.gateway.files}")
+    String files;
 
     @Bean
     RouteLocator gatewayRoute(RouteLocatorBuilder locatorBuilder) {
@@ -51,6 +43,9 @@ public class GatewayConfiguration {
                 .route("accounts", route -> route
                         .path("/accounts/**")
                         .uri(accounts))
+                .route("files", route -> route
+                        .path("/storage/**")
+                        .uri(files))
                 .build();
     }
 }
