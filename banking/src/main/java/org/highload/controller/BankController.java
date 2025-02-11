@@ -30,7 +30,7 @@ public class BankController {
     }
 
     @GetMapping("/{id}/fiat-wallets/{fiatWalletId}")
-    public Mono<Long> getBalanceFromFiatWallet(@PathVariable("fiatWalletId") Long fiatWalletId) {
+    public Mono<Long> getBalanceFromFiatWallet(@PathVariable("id") Long id, @PathVariable("fiatWalletId") Long fiatWalletId) {
         return bankService.checkFiatBalanceFromWallet(fiatWalletId);
     }
 }
