@@ -37,6 +37,15 @@ public class ObjectStorageService implements StorageService {
         }
     }
 
+    public String storeInputStream(InputStream inputStream, String filename) {
+        try {
+            minioAdapter.putObject(inputStream, filename);
+            return minioAdapter.getPresignedObjectUrl(filename);
+        } catch (MinioException | NoSuchAlgorithmException | IOException | InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public String loadAll() throws RuntimeException {
         List<ObjectDto> list = new ArrayList<>();
